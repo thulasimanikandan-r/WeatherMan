@@ -1,4 +1,4 @@
-package com.mani.weather.weatherman.common.util;
+package com.mani.weather.weatherman.common.network;
 
 import android.content.Context;
 import android.net.Uri;
@@ -36,7 +36,7 @@ public class NetworkUtil {
 
         try {
             URL weatherQueryUrl = new URL(weatherQueryUri.toString());
-            Log.v(AppConstant.LOG_TAG, "URL: " + weatherQueryUrl);
+            Log.d(AppConstant.LOG_TAG, "URL: " + weatherQueryUrl);
             return weatherQueryUrl;
         } catch (MalformedURLException e) {
             e.printStackTrace();
