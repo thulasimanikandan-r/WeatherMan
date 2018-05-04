@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
+import com.mani.weather.weatherman.BuildConfig;
 import com.mani.weather.weatherman.core.application.AppConstant;
 
 import java.io.IOException;
@@ -24,14 +25,18 @@ public class NetworkUtil {
 
 
     private static URL buildUrlWithLocationQuery(String locationQuery) {
-        Uri weatherQueryUri = Uri.parse(AppConstant.WEATHER_MAN_BASE_URL).buildUpon()
+        Uri weatherQueryUri = Uri.parse(AppConstant.WEATHER_MAN_BASE_URL).
+                buildUpon()
+                .appendPath("data")
+                .appendPath("2.5")
+                .appendPath("weather")
                 .appendQueryParameter(QUERY_PARAM, locationQuery)
-                .appendQueryParameter(APP_ID_PARAM, AppConstant.API_KEY)
+                .appendQueryParameter(APP_ID_PARAM, BuildConfig.API_KEY)
                 .build();
 
         try {
             URL weatherQueryUrl = new URL(weatherQueryUri.toString());
-            Log.v(TAG, "URL: " + weatherQueryUrl);
+            Log.v(AppConstant.LOG_TAG, "URL: " + weatherQueryUrl);
             return weatherQueryUrl;
         } catch (MalformedURLException e) {
             e.printStackTrace();
