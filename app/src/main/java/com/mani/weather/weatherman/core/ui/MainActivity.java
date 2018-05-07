@@ -117,17 +117,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         //Temperature
         float temp = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_TEMPERATURE));
-        @SuppressLint({"StringFormatInvalid", "LocalSuppress"}) String twmpString = getString(R.string.format_temperature, temp);
+        String twmpString = getString(R.string.format_temperature, temp);
         mBinding.tvTemperature.setText(twmpString);
+
+        //Set Image resources
+        int weatherId = data.getInt(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_WEATHER_ID));
+        int imagesForWeatherCondition = WeatherManUtils.getImagesForWeatherCondition(weatherId);
+        mBinding.ivIcon.setImageResource(imagesForWeatherCondition);
 
         //Pressure
         float pressure = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_PRESSURE));
-        @SuppressLint({"StringFormatInvalid", "LocalSuppress"}) String pressureString = getString(R.string.format_pressure, pressure);
+        String pressureString = getString(R.string.format_pressure, pressure);
         mBinding.uvRays.setText(pressureString);
 
         //humidity
         float humidity = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_HUMIDITY));
-        @SuppressLint("StringFormatMatches") String humidityString = getString(R.string.format_humidity, humidity);
+        String humidityString = getString(R.string.format_humidity, humidity);
         mBinding.humidity.setText(humidityString);
 
         //wind
