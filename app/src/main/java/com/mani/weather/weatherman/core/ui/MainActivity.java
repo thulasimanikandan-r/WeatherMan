@@ -115,8 +115,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         //Pressure
         float pressure = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_PRESSURE));
-        String pressureString = getString(R.string.format_humidity, pressure);
-        mBinding.humidity.setText(pressureString);
+        String pressureString = getString(R.string.format_pressure, pressure);
+        mBinding.uvRays.setText(pressureString);
 
         //humidity
         float humidity = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_HUMIDITY));
@@ -131,9 +131,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         //city
         String city = data.getString(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_WEATHER_CITY));
-
-
-
+        mBinding.mCity.setText(city);
 
 
     }
