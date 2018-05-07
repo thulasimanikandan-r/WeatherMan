@@ -11,6 +11,9 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.mani.weather.weatherman.R;
 import com.mani.weather.weatherman.common.data.WeatherContract;
@@ -19,12 +22,10 @@ import com.mani.weather.weatherman.common.util.WeatherManUtils;
 import com.mani.weather.weatherman.core.application.AppConstant;
 import com.mani.weather.weatherman.databinding.ActivityMainBinding;
 
-import static com.mani.weather.weatherman.core.application.AppConstant.WEATHER_DETAIL_PROJECTION;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     ActivityMainBinding mBinding;
-    private Uri mUri;
     private static final int ID_DETAIL_LOADER = 123;
 
 
@@ -33,12 +34,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
+        WeatherManSyncUtil.startImmediateSync(this);
         getSupportLoaderManager().initLoader(ID_DETAIL_LOADER, null, this);
 
-        WeatherManSyncUtil.startImmediateSync(this);
+
+        showHideLoading(true);
 
     }
-
 
     @NonNull
     @Override
@@ -47,10 +49,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         switch (id) {
 
             case ID_DETAIL_LOADER:
+
+
                 Uri mUri = WeatherContract.WeatherEntry.CONTENT_URI;
                 return new CursorLoader(this,
                         mUri,
-                        WEATHER_DETAIL_PROJECTION,
+                        null,
                         null,
                         null,
                         null);
@@ -61,30 +65,76 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-
-        if (data != null && data.moveToFirst()) {
-
-            //Pressure
-
-            //humidity
-            float humidity = data.getFloat(AppConstant.INDEX_WEATHER_HUMIDITY);
-            String humidityString = getString(R.string.format_humidity, humidity);
-            mBinding.humidity.setText(humidityString);
-
-            //wind
-            float windSpeed = data.getFloat(AppConstant.INDEX_WEATHER_WIND_SPEED);
-            float windDirection = data.getFloat(AppConstant.INDEX_WEATHER_DEGREES);
-            String windString = WeatherManUtils.getFormattedWind(this, windSpeed, windDirection);
-            mBinding.wind.setText(windString);
-
-
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                showHideLoading(false);
+                displayScreenDetails(cursor);
+                cursor.close();
+            } else {
+                Toast.makeText(this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e(AppConstant.LOG_TAG, "Exception in loader finished" + e.getMessage());
         }
-
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+
+    }
+
+    void showHideLoading(boolean isVisible) {
+        if (isVisible) {
+            mBinding.pbLoadingIndicator.setVisibility(View.VISIBLE);
+            mBinding.humidity.setVisibility(View.INVISIBLE);
+            mBinding.wind.setVisibility(View.INVISIBLE);
+        } else {
+            mBinding.pbLoadingIndicator.setVisibility(View.INVISIBLE);
+            mBinding.humidity.setVisibility(View.VISIBLE);
+            mBinding.wind.setVisibility(View.VISIBLE);
+        }
+    }
+
+    void displayScreenDetails(Cursor data) {
+
+       /* //High Temperature
+        float highTemp = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_MAX_TEMP));
+        String hTempString = getString(R.string.format_temperature, highTemp);
+        mBinding.tvTemperature.setText(hTempString);
+
+        //Low Temperature
+        float lowTemp = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_MIN_TEMP));
+        String lTempString = getString(R.string.format_temperature, lowTemp);
+        mBinding.tvTemperature.setText(lTempString);*/
+
+        //Temperature
+        float temp = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_TEMPERATURE));
+        String twmpString = getString(R.string.format_temperature, temp);
+        mBinding.tvTemperature.setText(twmpString);
+
+        //Pressure
+        float pressure = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_PRESSURE));
+        String pressureString = getString(R.string.format_humidity, pressure);
+        mBinding.humidity.setText(pressureString);
+
+        //humidity
+        float humidity = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_HUMIDITY));
+        String humidityString = getString(R.string.format_humidity, humidity);
+        mBinding.humidity.setText(humidityString);
+
+        //wind
+        float windSpeed = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_WIND_SPEED));
+        float windDirection = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_DEGREES));
+        String windString = WeatherManUtils.getFormattedWind(this, windSpeed, windDirection);
+        mBinding.wind.setText(windString);
+
+        //city
+        String city = data.getString(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_WEATHER_CITY));
+
+
+
+
 
     }
 }
