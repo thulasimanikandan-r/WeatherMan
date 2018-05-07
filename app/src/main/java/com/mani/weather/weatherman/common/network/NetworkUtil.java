@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.mani.weather.weatherman.BuildConfig;
+import com.mani.weather.weatherman.common.data.WeatherPreferences;
+import com.mani.weather.weatherman.common.util.WeatherManUtils;
 import com.mani.weather.weatherman.core.application.AppConstant;
 
 import java.io.IOException;
@@ -45,7 +47,7 @@ public class NetworkUtil {
     }
 
     public static URL getUrl(Context context){
-        String location = "Bangalore,in";
+        String location = WeatherPreferences.getPreferredWeatherLocation(context);
         return buildUrlWithLocationQuery(location);
     }
 
