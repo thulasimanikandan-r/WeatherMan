@@ -29,7 +29,7 @@ public class NetworkUtil {
                 buildUpon()
                 .appendPath("data")
                 .appendPath("2.5")
-                .appendPath("weather")
+                .appendPath("forecast")
                 .appendQueryParameter(QUERY_PARAM, locationQuery)
                 .appendQueryParameter(APP_ID_PARAM, BuildConfig.API_KEY)
                 .build();
@@ -45,7 +45,7 @@ public class NetworkUtil {
     }
 
     public static URL getUrl(Context context){
-        String location = "Bangalore";
+        String location = "Bangalore,IN";
         return buildUrlWithLocationQuery(location);
     }
 
