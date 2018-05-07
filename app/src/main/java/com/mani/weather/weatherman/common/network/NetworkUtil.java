@@ -45,7 +45,7 @@ public class NetworkUtil {
     }
 
     public static URL getUrl(Context context){
-        String location = "Bangalore,IN";
+        String location = "Bangalore,in";
         return buildUrlWithLocationQuery(location);
     }
 
