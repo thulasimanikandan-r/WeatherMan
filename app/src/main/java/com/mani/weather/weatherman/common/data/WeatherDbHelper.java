@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class WeatherDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "weatherman.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 5;
 
     public WeatherDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -22,15 +22,19 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
 
                 "CREATE TABLE " + WeatherContract.WeatherEntry.TABLE_NAME + " (" +
                         WeatherContract.WeatherEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        //  WeatherContract.WeatherEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
+                        WeatherContract.WeatherEntry.COLUMN_FORECAST_ID + " INTEGER , " +
+                        WeatherContract.WeatherEntry.COLUMN_DATE + " TEXT " +
                         WeatherContract.WeatherEntry.COLUMN_WEATHER_ID + " INTEGER NOT NULL," +
-                        WeatherContract.WeatherEntry.COLUMN_MIN_TEMP + " REAL NOT NULL, " +
-                        WeatherContract.WeatherEntry.COLUMN_MAX_TEMP + " REAL NOT NULL, " +
-                        WeatherContract.WeatherEntry.COLUMN_HUMIDITY + " REAL NOT NULL, " +
-                        WeatherContract.WeatherEntry.COLUMN_PRESSURE + " REAL NOT NULL, " +
-                        WeatherContract.WeatherEntry.COLUMN_WIND_SPEED + " REAL NOT NULL, " +
-                        WeatherContract.WeatherEntry.COLUMN_DEGREES + " REAL NOT NULL);";
-        /*  " UNIQUE (" + WeatherContract.WeatherEntry.COLUMN_DATE + ") ON CONFLICT REPLACE);";*/
+                        WeatherContract.WeatherEntry.COLUMN_WEATHER_DESCRIPTION + " TEXT , " +
+                        WeatherContract.WeatherEntry.COLUMN_TEMPERATURE + " REAL , " +
+                        WeatherContract.WeatherEntry.COLUMN_MIN_TEMP + " REAL , " +
+                        WeatherContract.WeatherEntry.COLUMN_MAX_TEMP + " REAL , " +
+                        WeatherContract.WeatherEntry.COLUMN_HUMIDITY + " REAL , " +
+                        WeatherContract.WeatherEntry.COLUMN_PRESSURE + " REAL , " +
+                        WeatherContract.WeatherEntry.COLUMN_WIND_SPEED + " REAL , " +
+                        WeatherContract.WeatherEntry.COLUMN_DEGREES + " REAL, " +
+                        WeatherContract.WeatherEntry.COLUMN_WEATHER_CITY + " TEXT , " +
+                        " UNIQUE (" + WeatherContract.WeatherEntry.COLUMN_DATE + ") ON CONFLICT REPLACE);";
 
 
         db.execSQL(SQL_CREATE_WEATHER_TABLE);

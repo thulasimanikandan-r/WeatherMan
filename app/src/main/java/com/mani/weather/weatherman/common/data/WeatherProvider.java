@@ -1,5 +1,6 @@
 package com.mani.weather.weatherman.common.data;
 
+import android.annotation.TargetApi;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -86,7 +87,7 @@ public class WeatherProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return null;
+        throw new RuntimeException("No need for the WeatherManApp");
     }
 
     @Override
@@ -100,11 +101,11 @@ public class WeatherProvider extends ContentProvider {
                 int rowsInserted = 0;
                 try {
                     for (ContentValues value : values) {
-                        long weatherDate =
+                        /*long weatherDate =
                                 value.getAsLong(WeatherContract.WeatherEntry.COLUMN_DATE);
                         if (!WeatherManUtils.isDateNormalized(weatherDate)) {
                             throw new IllegalArgumentException("Date must be normalized to insert");
-                        }
+                        }*/
 
                         long _id = db.insert(WeatherContract.WeatherEntry.TABLE_NAME, null, value);
                         if (_id != -1) {
@@ -130,7 +131,7 @@ public class WeatherProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        return null;
+        throw new RuntimeException("buld insert instead");
     }
 
     @Override
@@ -158,6 +159,14 @@ public class WeatherProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        throw new RuntimeException("No Updates");
     }
+
+    @Override
+    @TargetApi(11)
+    public void shutdown() {
+        mOpenHelper.close();
+        super.shutdown();
+    }
+
 }
