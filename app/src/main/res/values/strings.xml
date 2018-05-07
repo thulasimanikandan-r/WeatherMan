@@ -36,4 +36,13 @@
     <string name="day_today">Today</string>
 
 
+    <!-- Preference Screen / settings screen-->
+    <string name="pref_location_label">Location</string>
+    <!-- Shared Pref Values for settings screen-->
+    <string name="pref_location_default" translatable="false">Bangalore,in</string>
+    <string name="pref_location_key" translatable="false">location</string>
+
+    <string name="action_settings">Settings</string>
+
+
 </resources>
