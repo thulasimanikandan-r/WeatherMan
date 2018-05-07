@@ -1,7 +1,6 @@
 package com.mani.weather.weatherman.core.ui;
 
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.preference.CheckBoxPreference;
@@ -11,7 +10,6 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 
 import com.mani.weather.weatherman.R;
-import com.mani.weather.weatherman.common.data.WeatherContract;
 import com.mani.weather.weatherman.common.sync.WeatherManSyncUtil;
 
 
@@ -69,18 +67,11 @@ public class SettingFragment extends PreferenceFragmentCompat implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Activity activity = getActivity();
+       // Activity activity = getActivity();
 
         if (key.equals(getString(R.string.pref_location_key))) {
             WeatherManSyncUtil.startImmediateSync(getContext());
-        } else if (key.equals(getString(R.string.pref_units_key))) {
-            activity.getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
         }
-        Preference preference = findPreference(key);
-        if (null != preference) {
-            if (!(preference instanceof CheckBoxPreference)) {
-                setPreferenceSummary(preference, sharedPreferences.getString(key, ""));
-            }
-        }
+
     }
 }
