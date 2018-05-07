@@ -33,5 +33,7 @@
         <xliff:g id="humidity">%1.0f</xliff:g> %%
     </string>
 
+    <string name="day_today">Today</string>
+
 
 </resources>
