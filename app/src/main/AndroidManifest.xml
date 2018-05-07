@@ -19,6 +19,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".core.ui.SettingsActivity"/>
+
         <provider
             android:name=".common.data.WeatherProvider"
             android:authorities="@string/content_authority"
