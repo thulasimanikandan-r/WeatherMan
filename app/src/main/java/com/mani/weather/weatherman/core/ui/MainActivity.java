@@ -1,6 +1,8 @@
 package com.mani.weather.weatherman.core.ui;
 
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -12,6 +14,9 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -32,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setElevation(0f);
+
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         WeatherManSyncUtil.startImmediateSync(this);
@@ -110,17 +117,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         //Temperature
         float temp = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_TEMPERATURE));
-        String twmpString = getString(R.string.format_temperature, temp);
+        @SuppressLint({"StringFormatInvalid", "LocalSuppress"}) String twmpString = getString(R.string.format_temperature, temp);
         mBinding.tvTemperature.setText(twmpString);
 
         //Pressure
         float pressure = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_PRESSURE));
-        String pressureString = getString(R.string.format_pressure, pressure);
+        @SuppressLint({"StringFormatInvalid", "LocalSuppress"}) String pressureString = getString(R.string.format_pressure, pressure);
         mBinding.uvRays.setText(pressureString);
 
         //humidity
         float humidity = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_HUMIDITY));
-        String humidityString = getString(R.string.format_humidity, humidity);
+        @SuppressLint("StringFormatMatches") String humidityString = getString(R.string.format_humidity, humidity);
         mBinding.humidity.setText(humidityString);
 
         //wind
@@ -133,6 +140,28 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         String city = data.getString(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_WEATHER_CITY));
         mBinding.mCity.setText(city);
 
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.weather_forecast, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
 
     }
 }
