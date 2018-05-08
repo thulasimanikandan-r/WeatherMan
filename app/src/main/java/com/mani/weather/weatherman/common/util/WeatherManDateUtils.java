@@ -6,7 +6,9 @@ import android.text.format.DateUtils;
 
 import com.mani.weather.weatherman.R;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -17,43 +19,20 @@ public class WeatherManDateUtils {
 
     public static final long DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1);
 
-    public static String getFriendlyDateString(Context context, long normalizedUtcMidnight, boolean showFullDate) {
+    public static String dateInDayFormat(Context context, String dateStr) {
+        SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date date;
+        try {
+            date = inFormat.parse(dateStr);
+            long dateInMillis = date.getTime();
+            return getDayName(context, dateInMillis);
 
-        long localDate = getLocalMidnightFromNormalizedUtcDate(normalizedUtcMidnight);
-
-        long daysFromEpochToProvidedDate = elapsedDaysSinceEpoch(localDate);
-
-        long daysFromEpochToToday = elapsedDaysSinceEpoch(System.currentTimeMillis());
-
-        if (daysFromEpochToProvidedDate == daysFromEpochToToday || showFullDate) {
-
-            String dayName = getDayName(context, localDate);
-            String readableDate = getReadableDateString(context, localDate);
-            if (daysFromEpochToProvidedDate - daysFromEpochToToday < 2) {
-                @SuppressLint("SimpleDateFormat") String localizedDayName = new SimpleDateFormat("EEEE").format(localDate);
-                return readableDate.replace(localizedDayName, dayName);
-            } else {
-                return readableDate;
-            }
-        } else if (daysFromEpochToProvidedDate < daysFromEpochToToday + 7) {
-            return getDayName(context, localDate);
-        } else {
-            int flags = DateUtils.FORMAT_SHOW_DATE
-                    | DateUtils.FORMAT_NO_YEAR
-                    | DateUtils.FORMAT_ABBREV_ALL
-                    | DateUtils.FORMAT_SHOW_WEEKDAY;
-
-            return DateUtils.formatDateTime(context, localDate, flags);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
-    private static String getReadableDateString(Context context, long timeInMillis) {
-        int flags = DateUtils.FORMAT_SHOW_DATE
-                | DateUtils.FORMAT_NO_YEAR
-                | DateUtils.FORMAT_SHOW_WEEKDAY;
-
-        return DateUtils.formatDateTime(context, timeInMillis, flags);
-    }
 
     private static String getDayName(Context context, long dateInMillis) {
 
@@ -84,10 +63,5 @@ public class WeatherManDateUtils {
         return TimeUnit.MILLISECONDS.toDays(utcDate);
     }
 
-    private static long getLocalMidnightFromNormalizedUtcDate(long normalizedUtcDate) {
-        TimeZone timeZone = TimeZone.getDefault();
-        long gmtOffset = timeZone.getOffset(normalizedUtcDate);
-        long localMidnightMillis = normalizedUtcDate - gmtOffset;
-        return localMidnightMillis;
-    }
+
 }
