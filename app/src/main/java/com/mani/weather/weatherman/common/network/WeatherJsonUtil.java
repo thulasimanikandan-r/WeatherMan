@@ -26,10 +26,12 @@ public class WeatherJsonUtil {
         JSONObject cityJson = forecastJson.getJSONObject("city");
         String city = cityJson.getString("name");
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < listJsonArray.length(); i++) {
 
             JSONObject listJson = listJsonArray.getJSONObject(i);
 
+            //For WeatherDates
+            long weatherDate = listJson.getLong("dt");
             String dateStr = listJson.getString("dt_txt");
 
             //For Weather Wind Details
@@ -58,6 +60,7 @@ public class WeatherJsonUtil {
 
 
             ContentValues weatherValues = new ContentValues();
+            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_WEATHER_DATE, weatherDate);
             weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DATE, dateStr);
             weatherValues.put(WeatherContract.WeatherEntry.COLUMN_HUMIDITY, humidity);
             weatherValues.put(WeatherContract.WeatherEntry.COLUMN_PRESSURE, pressure);
