@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class WeatherManUtils {
 
-       @SuppressLint("StringFormatInvalid")
-       public static String getFormattedWind(Context context, float windSpeed, float degrees) {
+    @SuppressLint("StringFormatInvalid")
+    public static String getFormattedWind(Context context, float windSpeed, float degrees) {
         int windFormat = R.string.format_wind_kmh;
 
         String direction = "Unknown";
@@ -45,8 +45,8 @@ public class WeatherManUtils {
         long roundedHigh = Math.round(high);
         long roundedLow = Math.round(low);
 
-        String formattedHigh = formatTemperature(context, kelvinToFahrenheit(roundedHigh));
-        String formattedLow = formatTemperature(context, kelvinToFahrenheit(roundedLow));
+        String formattedHigh = formatTemperature(context, kelvinToCelcius(roundedHigh));
+        String formattedLow = formatTemperature(context, kelvinToCelcius(roundedLow));
 
         String highLowStr = formattedHigh + " / " + formattedLow;
         return highLowStr;
@@ -56,16 +56,21 @@ public class WeatherManUtils {
     @SuppressLint("StringFormatInvalid")
     public static String formatTemperature(Context context, double temperature) {
 
-       // temperature = celsiusToFahrenheit(temperature);
+        // temperature = celsiusToFahrenheit(temperature);
 
         int temperatureId = R.string.format_temperature;
         return String.format(context.getString(temperatureId), temperature);
     }
 
 
-    private static double kelvinToFahrenheit(double temperatureInCelsius) {
-        double temperatureInFahrenheit = (Math.round((temperatureInCelsius - 273.15)) * 1.8) + 32;
+    private static double kelvinToFahrenheit(double temperatureInKelvin) {
+        double temperatureInFahrenheit = (Math.round((temperatureInKelvin - 273.15)) * 1.8) + 32;
         return temperatureInFahrenheit;
+    }
+
+    private static double kelvinToCelcius(double temperatureInKelvin) {
+        double temperatureInCelcius = temperatureInKelvin - 273.15;
+        return temperatureInCelcius;
     }
 
 
