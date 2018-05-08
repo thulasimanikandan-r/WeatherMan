@@ -11,9 +11,9 @@
         <ImageView
             android:id="@+id/background"
             android:layout_width="0dp"
-            android:layout_height="308dp"
+            android:layout_height="282dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@color/colorPrimary" />
@@ -23,13 +23,9 @@
             style="@style/WeatherData"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_marginStart="60dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/humidity"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/humidity"
-            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/iv_wind"
+            app:layout_constraintTop_toBottomOf="@+id/iv_wind"
             tools:text="wind" />
 
         <TextView
@@ -37,20 +33,10 @@
             style="@style/WeatherData"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/uv_rays"
-            app:layout_constraintHorizontal_bias="0.591"
-            app:layout_constraintStart_toEndOf="@+id/wind"
-            app:layout_constraintTop_toBottomOf="@+id/tv_temperature"
-            app:layout_constraintVertical_bias="0.139"
-            tools:text="humidity"
-
-            />
+            app:layout_constraintStart_toStartOf="@+id/iv_humidity"
+            app:layout_constraintTop_toBottomOf="@+id/iv_humidity"
+            tools:text="humidity" />
 
         <ProgressBar
             android:id="@+id/pb_loading_indicator"
@@ -68,22 +54,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.474" />
+            app:layout_constraintVertical_bias="0.549" />
 
         <TextView
             android:id="@+id/tv_temperature"
             style="@style/WeatherData"
-            android:layout_width="67dp"
-            android:layout_height="51dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:textSize="32sp"
+            android:layout_marginTop="4dp"
+            android:textSize="28sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_icon"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/iv_icon"
+            app:layout_constraintTop_toTopOf="@+id/iv_icon"
             tools:text="33" />
 
 
@@ -95,23 +82,23 @@
             android:layout_marginEnd="60dp"
             android:layout_marginRight="60dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/humidity"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/humidity"
+            app:layout_constraintStart_toStartOf="@+id/iv_pressure"
+            app:layout_constraintTop_toBottomOf="@+id/iv_pressure"
             tools:text="uv_rays" />
 
         <ImageView
             android:id="@+id/iv_icon"
-            android:layout_width="51dp"
-            android:layout_height="52dp"
+            android:layout_width="73dp"
+            android:layout_height="71dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="86dp"
             android:contentDescription="@string/format_temperature"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintHorizontal_bias="0.254"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/background"
             app:srcCompat="@drawable/art_clear" />
@@ -120,40 +107,33 @@
             android:id="@+id/iv_wind"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/wind"
-            app:layout_constraintEnd_toEndOf="@+id/wind"
-            app:layout_constraintTop_toTopOf="@+id/iv_humidity"
+            android:layout_marginLeft="44dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_icon"
             app:srcCompat="@drawable/ic_art_wind" />
 
         <ImageView
             android:id="@+id/iv_humidity"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="@+id/humidity"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/humidity"
-            app:layout_constraintTop_toBottomOf="@+id/tv_temperature"
+            android:layout_marginLeft="88dp"
+            android:layout_marginStart="88dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toEndOf="@+id/iv_wind"
+            app:layout_constraintTop_toBottomOf="@+id/iv_icon"
             app:srcCompat="@drawable/ic_humidity" />
 
         <ImageView
             android:id="@+id/iv_pressure"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/uv_rays"
-            app:layout_constraintEnd_toEndOf="@+id/uv_rays"
-            app:layout_constraintStart_toStartOf="@+id/uv_rays"
-            app:layout_constraintTop_toTopOf="@+id/iv_humidity"
+            android:layout_marginLeft="88dp"
+            android:layout_marginStart="88dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toEndOf="@+id/iv_humidity"
+            app:layout_constraintTop_toBottomOf="@+id/iv_icon"
             app:srcCompat="@drawable/ic_pressure" />
 
         <TextView
@@ -179,11 +159,39 @@
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:text="@string/day_today"
             app:layout_constraintBottom_toTopOf="@+id/iv_icon"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/day_today" />
+            app:layout_constraintTop_toTopOf="parent" />
 
+
+        <TextView
+            android:id="@+id/tv_weather_description"
+            style="@style/WeatherData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_icon"
+            app:layout_constraintStart_toStartOf="@+id/tv_temperature"
+            app:layout_constraintTop_toBottomOf="@+id/tv_temperature"
+            tools:text="cloudy" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_weather_forecast"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/background" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>
