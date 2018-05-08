@@ -20,7 +20,7 @@ public class WeatherJsonUtil {
 
 
         JSONArray listJsonArray = forecastJson.getJSONArray("list");
-        ContentValues[] weatherContentValues = new ContentValues[1];//listJson.length()
+        ContentValues[] weatherContentValues = new ContentValues[listJsonArray.length()];//listJson.length()
 
         //CITY
         JSONObject cityJson = forecastJson.getJSONObject("city");
