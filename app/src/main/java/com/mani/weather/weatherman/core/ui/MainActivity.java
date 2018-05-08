@@ -1,6 +1,7 @@
 package com.mani.weather.weatherman.core.ui;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
@@ -12,11 +13,15 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.mani.weather.weatherman.R;
@@ -24,13 +29,30 @@ import com.mani.weather.weatherman.common.data.WeatherContract;
 import com.mani.weather.weatherman.common.sync.WeatherManSyncUtil;
 import com.mani.weather.weatherman.common.util.WeatherManUtils;
 import com.mani.weather.weatherman.core.application.AppConstant;
+import com.mani.weather.weatherman.core.ui.adapter.WeatherForeCastAdapter;
 import com.mani.weather.weatherman.databinding.ActivityMainBinding;
 
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, WeatherForeCastAdapter.ForecastAdapterOnClickHandler {
 
     ActivityMainBinding mBinding;
     private static final int ID_DETAIL_LOADER = 123;
+
+    private WeatherForeCastAdapter mWeatherForeCastAdapter;
+    private int mPosition = RecyclerView.NO_POSITION;
+
+    Animation mAnimation;
+
+    public static final String[] MAIN_FORECAST_PROJECTION = {
+            WeatherContract.WeatherEntry.COLUMN_DATE,
+            WeatherContract.WeatherEntry.COLUMN_WEATHER_DATE,
+            WeatherContract.WeatherEntry.COLUMN_HUMIDITY,
+            WeatherContract.WeatherEntry.COLUMN_PRESSURE,
+            WeatherContract.WeatherEntry.COLUMN_WIND_SPEED,
+            WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,
+            WeatherContract.WeatherEntry.COLUMN_WEATHER_DESCRIPTION,
+            WeatherContract.WeatherEntry.COLUMN_WEATHER_CITY,
+    };
 
 
     @Override
@@ -40,12 +62,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
+        mAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+
         WeatherManSyncUtil.startImmediateSync(this);
         getSupportLoaderManager().initLoader(ID_DETAIL_LOADER, null, this);
-
+        initializeWeatherForeCastAdapter();
 
         showHideLoading(true);
 
+
+    }
+
+    private void initializeWeatherForeCastAdapter() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mBinding.rvWeatherForecast.setLayoutManager(layoutManager);
+        mBinding.rvWeatherForecast.setHasFixedSize(true);
+        mWeatherForeCastAdapter = new WeatherForeCastAdapter(this, this);
+        mBinding.rvWeatherForecast.setAdapter(mWeatherForeCastAdapter);
     }
 
 
@@ -59,6 +92,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
                 Uri mUri = WeatherContract.WeatherEntry.CONTENT_URI;
+                String sortOrder = WeatherContract.WeatherEntry.COLUMN_WEATHER_DATE + " ASC";
+
+                String selection = WeatherContract.WeatherEntry.getSqlSelectForTodayOnwards();
                 return new CursorLoader(this,
                         mUri,
                         null,
@@ -77,7 +113,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             if (cursor != null && cursor.moveToFirst()) {
                 showHideLoading(false);
                 displayScreenDetails(cursor);
-                cursor.close();
+
+
             } else {
                 Toast.makeText(this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
             }
@@ -88,7 +125,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-
+        //Set null for RecyclerView Adapter
+        mWeatherForeCastAdapter.swapCursor(null);
     }
 
     void showHideLoading(boolean isVisible) {
@@ -103,27 +141,34 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+    @SuppressLint({"StringFormatInvalid", "LocalSuppress", "StringFormatMatches"})
     void displayScreenDetails(Cursor data) {
 
-       /* //High Temperature
+        //Set Adapter
+        mWeatherForeCastAdapter.swapCursor(data);
+        if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+        mBinding.rvWeatherForecast.smoothScrollToPosition(mPosition);
+
+        //Temperature
+        //High Temperature
         float highTemp = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_MAX_TEMP));
-        String hTempString = getString(R.string.format_temperature, highTemp);
-        mBinding.tvTemperature.setText(hTempString);
 
         //Low Temperature
         float lowTemp = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_MIN_TEMP));
-        String lTempString = getString(R.string.format_temperature, lowTemp);
-        mBinding.tvTemperature.setText(lTempString);*/
 
-        //Temperature
         float temp = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_TEMPERATURE));
-        String twmpString = getString(R.string.format_temperature, temp);
-        mBinding.tvTemperature.setText(twmpString);
+        String tempString = WeatherManUtils.formatHighLows(this, highTemp, lowTemp);
+        mBinding.tvTemperature.setText(tempString);
 
         //Set Image resources
         int weatherId = data.getInt(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_WEATHER_ID));
         int imagesForWeatherCondition = WeatherManUtils.getImagesForWeatherCondition(weatherId);
         mBinding.ivIcon.setImageResource(imagesForWeatherCondition);
+        mBinding.ivIcon.startAnimation(mAnimation);
+
+        //Set Weather description
+        String weatherDesc = data.getString(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_WEATHER_DESCRIPTION));
+        mBinding.tvWeatherDescription.setText(weatherDesc);
 
         //Pressure
         float pressure = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_PRESSURE));
@@ -167,6 +212,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
 
         return super.onOptionsItemSelected(item);
+
+    }
+
+    @Override
+    public void onClick(long date) {
 
     }
 }
