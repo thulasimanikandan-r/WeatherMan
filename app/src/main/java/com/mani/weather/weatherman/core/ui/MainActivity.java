@@ -43,21 +43,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     Animation mAnimation;
 
-    public static final String[] MAIN_FORECAST_PROJECTION = {
-            WeatherContract.WeatherEntry.COLUMN_DATE,
-            WeatherContract.WeatherEntry.COLUMN_WEATHER_DATE,
-            WeatherContract.WeatherEntry.COLUMN_HUMIDITY,
-            WeatherContract.WeatherEntry.COLUMN_PRESSURE,
-            WeatherContract.WeatherEntry.COLUMN_WIND_SPEED,
-            WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,
-            WeatherContract.WeatherEntry.COLUMN_WEATHER_DESCRIPTION,
-            WeatherContract.WeatherEntry.COLUMN_DEGREES,
-            WeatherContract.WeatherEntry.COLUMN_WEATHER_CITY,
-            WeatherContract.WeatherEntry.COLUMN_TEMPERATURE,
-            WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
-            WeatherContract.WeatherEntry.COLUMN_MIN_TEMP
 
-    };
 
 
     @Override
@@ -111,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 // String selection = WeatherContract.WeatherEntry.getSqlSelectForTodayOnwards();
                 return new CursorLoader(this,
                         mUri,
-                        MAIN_FORECAST_PROJECTION,
+                        AppConstant.MAIN_FORECAST_PROJECTION,
                         null,
                         null,
                         sortOrder);
@@ -127,10 +113,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             if (cursor != null && cursor.moveToFirst()) {
                 showHideLoading(false);
                 displayScreenDetails(cursor);
-
-
-            } else {
-                Toast.makeText(this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             Log.e(AppConstant.LOG_TAG, "Exception in loader finished" + e.getMessage());
