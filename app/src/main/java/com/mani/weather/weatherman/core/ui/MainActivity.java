@@ -51,7 +51,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             WeatherContract.WeatherEntry.COLUMN_WIND_SPEED,
             WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,
             WeatherContract.WeatherEntry.COLUMN_WEATHER_DESCRIPTION,
+            WeatherContract.WeatherEntry.COLUMN_DEGREES,
             WeatherContract.WeatherEntry.COLUMN_WEATHER_CITY,
+            WeatherContract.WeatherEntry.COLUMN_TEMPERATURE,
+            WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
+            WeatherContract.WeatherEntry.COLUMN_MIN_TEMP
+
     };
 
 
@@ -65,12 +70,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 
         WeatherManSyncUtil.startImmediateSync(this);
+
+
         getSupportLoaderManager().initLoader(ID_DETAIL_LOADER, null, this);
         initializeWeatherForeCastAdapter();
 
         showHideLoading(true);
 
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        getSupportLoaderManager().initLoader(ID_DETAIL_LOADER, null, this);
+        this.recreate();
     }
 
     private void initializeWeatherForeCastAdapter() {
@@ -92,15 +106,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
                 Uri mUri = WeatherContract.WeatherEntry.CONTENT_URI;
-                String sortOrder = WeatherContract.WeatherEntry.COLUMN_WEATHER_DATE + " ASC";
+                String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
 
-                String selection = WeatherContract.WeatherEntry.getSqlSelectForTodayOnwards();
+                // String selection = WeatherContract.WeatherEntry.getSqlSelectForTodayOnwards();
                 return new CursorLoader(this,
                         mUri,
+                        MAIN_FORECAST_PROJECTION,
                         null,
                         null,
-                        null,
-                        null);
+                        sortOrder);
 
             default:
                 throw new RuntimeException("Loader Not Implemented: " + id);
@@ -156,7 +170,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         //Low Temperature
         float lowTemp = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_MIN_TEMP));
 
-        float temp = data.getFloat(data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_TEMPERATURE));
         String tempString = WeatherManUtils.formatHighLows(this, highTemp, lowTemp);
         mBinding.tvTemperature.setText(tempString);
 
@@ -217,6 +230,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onClick(long date) {
-
+    //TODO mani's comment - add to next activity called detailsWeatherActivity and pass all the values to display
     }
 }

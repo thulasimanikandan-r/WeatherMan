@@ -61,8 +61,9 @@ public class WeatherForeCastAdapter extends RecyclerView.Adapter<WeatherForeCast
         holder.mBinding.ivWeather.setImageResource(imagesForWeatherCondition);
 
         //Date
-        long dateInMillis = mCursor.getLong(mCursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_WEATHER_DATE));
-        String dateString = WeatherManDateUtils.getFriendlyDateString(mContext, dateInMillis, false);
+        //long dateInMillis = mCursor.getLong(mCursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_WEATHER_DATE));
+        String dateInStr = mCursor.getString(mCursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_DATE));
+        String dateString = WeatherManDateUtils.dateInDayFormat(mContext, dateInStr);
         holder.mBinding.tvForecastDay.setText(dateString);
 
         //Temperature
@@ -113,7 +114,6 @@ public class WeatherForeCastAdapter extends RecyclerView.Adapter<WeatherForeCast
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-
         }
     }
 }

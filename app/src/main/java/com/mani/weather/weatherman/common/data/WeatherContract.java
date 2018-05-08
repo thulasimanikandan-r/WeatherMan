@@ -37,16 +37,5 @@ public class WeatherContract {
 
         public static final String COLUMN_WEATHER_CITY = "city";
 
-
-        public static Uri buildWeatherUriWithDate(long date) {
-            return CONTENT_URI.buildUpon()
-                    .appendPath(Long.toString(date))
-                    .build();
-        }
-
-        public static String getSqlSelectForTodayOnwards() {
-            long normalizedUtcNow = WeatherManDateUtils.normalizeDate(System.currentTimeMillis());
-            return WeatherEntry.COLUMN_WEATHER_DATE + " >= " + normalizedUtcNow;
-        }
     }
 }
