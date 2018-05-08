@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.mani.weather.weatherman.common.util.WeatherManDateUtils;
 import com.mani.weather.weatherman.common.util.WeatherManUtils;
 
 /**
@@ -54,7 +55,7 @@ public class WeatherProvider extends ContentProvider {
                 cursor = mOpenHelper.getReadableDatabase().query(
                         WeatherContract.WeatherEntry.TABLE_NAME,
                         projection,
-                        WeatherContract.WeatherEntry.COLUMN_DATE + " = ? ",
+                        WeatherContract.WeatherEntry.COLUMN_WEATHER_DATE + " = ? ",
                         selectionArguments,
                         null,
                         null,
@@ -101,6 +102,11 @@ public class WeatherProvider extends ContentProvider {
                 int rowsInserted = 0;
                 try {
                     for (ContentValues value : values) {
+                        long weatherDate =
+                                value.getAsLong(WeatherContract.WeatherEntry.COLUMN_WEATHER_DATE);
+                       /* if (!WeatherManDateUtils.isDateNormalized(weatherDate)) {
+                            throw new IllegalArgumentException("Date must be normalized to insert");
+                        }*/
                         long _id = db.insert(WeatherContract.WeatherEntry.TABLE_NAME, null, value);
                         if (_id != -1) {
                             rowsInserted++;

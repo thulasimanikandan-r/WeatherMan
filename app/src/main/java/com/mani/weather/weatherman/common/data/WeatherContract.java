@@ -3,6 +3,8 @@ package com.mani.weather.weatherman.common.data;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.mani.weather.weatherman.common.util.WeatherManDateUtils;
+
 /**
  * Created by thulasimanikandan_ra on 04-05-2018
  */
@@ -20,9 +22,9 @@ public class WeatherContract {
                 .build();
 
         public static final String TABLE_NAME = "weatherMan";
-        public static final String COLUMN_FORECAST_ID = "forecast_Id";
         public static final String COLUMN_DEGREES = "degress";
         public static final String COLUMN_DATE = "date";
+        public static final String COLUMN_WEATHER_DATE = "date_wether";
         public static final String COLUMN_TEMPERATURE = "temperature";
         public static final String COLUMN_MIN_TEMP = "min";
         public static final String COLUMN_MAX_TEMP = "max";
@@ -40,6 +42,11 @@ public class WeatherContract {
             return CONTENT_URI.buildUpon()
                     .appendPath(Long.toString(date))
                     .build();
+        }
+
+        public static String getSqlSelectForTodayOnwards() {
+            long normalizedUtcNow = WeatherManDateUtils.normalizeDate(System.currentTimeMillis());
+            return WeatherEntry.COLUMN_WEATHER_DATE + " >= " + normalizedUtcNow;
         }
     }
 }
