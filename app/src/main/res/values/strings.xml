@@ -36,7 +36,9 @@
     <string name="day_today">Today</string>
 
 
-    <!-- Preference Screen / settings screen-->
+    <!-- - - - - - - - - - - - - - -
+    - Used by WeatherPreference    -
+    - - - - - - - - - - - - - - -->
     <string name="pref_location_label">Location</string>
     <!-- Shared Pref Values for settings screen-->
     <string name="pref_location_default" translatable="false">Bangalore,in</string>
@@ -44,5 +46,15 @@
 
     <string name="action_settings">Settings</string>
 
+
+    <!-- - - - - - - - - - - - - - -
+    - Used by WeatherManDateUtils  -
+    - - - - - - - - - - - - - - -->
+
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="format_full_friendly_date">
+        <xliff:g id="month">%1$s</xliff:g>, <xliff:g id="day">%2$s</xliff:g>
+    </string>
 
 </resources>
